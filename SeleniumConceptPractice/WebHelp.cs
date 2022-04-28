@@ -1,8 +1,9 @@
 ﻿using System;
-
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
@@ -12,13 +13,19 @@ using WebDriverManager.DriverConfigs.Impl;
 
 namespace SeleniumConceptPractice
 {
-    public static class WebHelp
+    public class WebHelp
     {
-        public static IWebDriver WebDriver;
+        
+        public StringBuilder verificationErrors;
+        private string baseURL;
+        private bool acceptNextAlert = true;
 
+        public IWebDriver WebDriver { get; set; }
         //Selenium Concept => WebDriverManager
-        public static void launchBrowser()
+
+        public void launchBrowser()
         {
+            //Chrome notification popup disabled
             ChromeOptions options = new ChromeOptions();
             options.AddArguments("--disable-notifications");
             new DriverManager().SetUpDriver(new ChromeConfig());
@@ -27,17 +34,23 @@ namespace SeleniumConceptPractice
         }
 
         //[Test]
-        public  static void openBrowser(string URL, string title)
+        public void openBrowser(string URL, string title)
         {
             WebDriver.Navigate().GoToUrl(URL);
             //Assert.IsTrue(WebDriver.Title.Contains(title));
         }
-        //[TearDown]
-        public static void TearDown()
+        public void TeardownTest()
         {
-            WebDriver.Quit();
+            try
+            {
+                WebDriver.Quit();
+            }
+            catch (Exception)
+            {
+                // Ignore errors if unable to close the browser
+            }
+            Assert.AreEqual("", verificationErrors.ToString());
         }
-        //[Test]
         public static void acceptingbrowserAlter()
         {
 

@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\OOPS",
+    "\\packages",
+    "\\SeleniumConceptPractice",
+    "\\TestResults"
   ],
   "SelectedNode": "\\SeleniumConceptPractice.sln",
   "PreviewInSolutionExplorer": false

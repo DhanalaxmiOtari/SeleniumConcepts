@@ -13,11 +13,13 @@ namespace SeleniumConceptPractice
 {
 
     [TestClass]
-    public class SeleniumTestscipts
+    public class SeleniumTestscipt
     {
         public static string title = "Testing Controls";
         public static string URL = "http://www.uitestpractice.com/Students/Switchto";
         public static string URL1 = "https://www.justdial.com/Pune/Institutions-For-Aged-in-Baner/nct-10270422";
+
+        WebHelp WebHelp = new WebHelp();
         
         [TestMethod]
         public void OneJustDialElderlyHomeAddress()
@@ -27,26 +29,15 @@ namespace SeleniumConceptPractice
             WebHelp.openBrowser(URL1, title);
             Thread.Sleep(5000);     
             WebHelp.WebDriver.FindElement(By.XPath("//section[@id='best_deal_div']//section[@class='jpbg']//span[@class='jcl'][contains(text(),'X')]")).Click();
-            //IWebElement TextinSelectedArea = WebHelp.WebDriver.FindElement(By.XPath("(//div[@class='hotmetaSrchLeft col-md-12 rsp'])[1]"));
-            /*Console.WriteLine(TextinSelectedArea.Text);
-            Thread.Sleep(5000);
-            string textOnJustDial = ((IJavaScriptExecutor)WebHelp.WebDriver).ExecuteScript("return document.documentElement.innerText").ToString();
-            Console.WriteLine(textOnJustDial);*/
             Console.WriteLine("******************************************************");
             Thread.Sleep(5000);
-            /* IList<IWebElement> morelinks = WebHelp.WebDriver.FindElements(By.XPath("//span[@class='cont_fl_addr']"));
-
-             Console.WriteLine("textToPrint" + morelinks.Count());
-             foreach (var link in morelinks)
-             {
-                 Console.WriteLine("Addresses at More = " + link.Text + "\n");
-                 Console.WriteLine("-----------------------------------------------------");
-             } */
             JustMouseHoverOver();
         }
 
         [TestMethod]
-        //Deriving text 
+        //This test practiced FilndElements, ForEach, Action class mouse hoverover
+        // This test collect data from the tooltip
+
         public void MouseHoverOverTextList()
         {
             WebHelp.launchBrowser();
@@ -72,7 +63,7 @@ namespace SeleniumConceptPractice
              for(int i=1; i< MoreCount; i++)
              {
                 IWebElement moreHoverOver = WebHelp.WebDriver.FindElement(By.XPath("//span[@id='morehvr_add_cont"+ i +"']"));
-                actions.MoveToElement(moreHoverOver).Perform();
+                actions.MoveToElement(moreHoverOver).Perform(); // Mouse Hoverover
                 Console.WriteLine("Addresses at " + i + " = " + moreHoverOver.Text + "\n");
                 Console.WriteLine("-----------------------------------------------------");
                 }
@@ -124,8 +115,7 @@ namespace SeleniumConceptPractice
             ((IJavaScriptExecutor)WebHelp.WebDriver).ExecuteScript("document.querySelector('p').style.backgroundColor = 'blue'");
             Thread.Sleep(7000);
             WebHelp.WebDriver.Navigate().GoToUrl("http://azure.csm.test4/");
-
-            WebHelp.TearDown();
+            WebHelp.TeardownTest();
 
         }
         [TestMethod]
@@ -207,8 +197,92 @@ namespace SeleniumConceptPractice
             Console.WriteLine("More Info Tool tip text " + MoreInfoText.Text);
             
         }
+        
 
+            public void TheLoginTest()
+            {
+                WebHelp.Navigate().GoToUrl("http://azure.csm.test4/");
+                driver.FindElement(By.XPath("//input[@name='SIG_USER']")).Clear();
+                driver.FindElement(By.XPath("//input[@name='SIG_USER']")).SendKeys("superviser");
+                driver.FindElement(By.XPath("//input[@name='SIG_PASS']")).Clear()
+                driver.FindElement(By.XPath("//input[@name='SIG_PASS']")).SendKeys("password");
+
+                driver.FindElement(By.Id("button-1014-btnEl")).Click();
+                driver.FindElement(By.XPath("//span[contains(text(),'Studies')]")).Click();
+                driver.FindElement(By.XPath("//div[@class="x - column - header - trigger" and @xpath=1]")).Click();
+                driver.FindElement(By.XPath("//span/@class='x-menu-item-text x-menu-item-text-default x-menu-item-indent x-menu-item-indent-right-arrow' and @xpath = 2]")).Click();
+                driver.FindElement(By.XPath("//input[@placeholder="Enter Filter Text..."]")).SendKeys("DH");
+                driver.FindElement(By.XPath("/html[1]/body[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/")).Click();
+                driver.FindElement(By.Id("button-1114-btnInnerEl")).Click();
+                driver.FindElement(By.Id("ext-351-inputEl")).Click();
+                driver.FindElement(By.Id("ext-351-inputEl")).Click();
+                driver.FindElement(By.Id("ext-351-inputEl")).Click();
+                driver.FindElement(By.Id("ext-351-inputEl")).Clear();
+                driver.FindElement(By.Id("ext-351-inputEl")).SendKeys("DH_Ames_Study_1_Ex_SetUp");
+                driver.FindElement(By.Id("button-1202-btnInnerEl")).Click();
+                driver.FindElement(By.Id("ext-element-96")).Click();
+                driver.FindElement(By.Id("button-1005-btnEl")).Click();
+                driver.FindElement(By.Id("button-1141-btnInnerEl")).Click();
+                driver.FindElement(By.Id("ext-element-96")).Click();
+                driver.FindElement(By.XPath("//table[@id='tableview-1222-record-170']/tbody/tr[2]/td[2]/div")).Click();
+                driver.FindElement(By.Id("button-1252-btnIconEl")).Click();
+                driver.FindElement(By.Id("button-1077-btnInnerEl")).Click();
+                driver.FindElement(By.Id("messagebox-1001-toolbar")).Click();
+                driver.FindElement(By.Id("button-1006-btnInnerEl")).Click();
+                driver.Close();
+            }
+            private bool IsElementPresent(By by)
+            {
+                try
+                {
+                    driver.FindElement(by);
+                    return true;
+                }
+                catch (NoSuchElementException)
+                {
+                    return false;
+                }
+            }
+
+            private bool IsAlertPresent()
+            {
+                try
+                {
+                    WebHelp.SwitchTo().Alert();
+                    return true;
+                }
+                catch (NoAlertPresentException)
+                {
+                    return false;
+                }
+            }
+
+            private string CloseAlertAndGetItsText()
+            {
+                try
+                {
+                    IAlert alert = driver.SwitchTo().Alert();
+                    string alertText = alert.Text;
+                    if (acceptNextAlert)
+                    {
+                        alert.Accept();
+                    }
+                    else
+                    {
+                        alert.Dismiss();
+                    }
+                    return alertText;
+                }
+                finally
+                {
+                    acceptNextAlert = true;
+                }
+            }
+        }
     }
+
+
+
 }
 
     
