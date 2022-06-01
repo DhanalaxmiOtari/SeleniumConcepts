@@ -231,12 +231,16 @@ namespace SeleniumConceptPractice
                 Console.WriteLine("For loopp window index = "+i+" "+windows[i]);
                 Console.WriteLine("Window Title = " + WebHelp.WebDriver.Title);
             }
-            WebHelp.WebDriver.SwitchTo().ParentFrame();
+            WebHelp.WebDriver.SwitchTo().Window(WebHelp.WebDriver.WindowHandles[0]);
             string ChildWindowTitle1 = WebHelp.WebDriver.Title;
             Console.WriteLine(ChildWindowTitle1);
             //Assert.AreEqual("Don't forget to read this...", ChildWindowTitle1);
-            Assert.AreEqual("Appium Test for Mobile Test Automation on Real Devices", ChildWindowTitle1);
-           
+            Assert.AreEqual("Top 9 Most Common Challenges Faced In Selenium Test Automation", ChildWindowTitle1);
+            WebHelp.WebDriver.Close();
+            WebHelp.WebDriver.SwitchTo().Window(WebHelp.WebDriver.WindowHandles[0]);
+            
+            Console.WriteLine("Title = "+WebHelp.WebDriver.Title);
+            WebHelp.TeardownTest();
         }
             private bool IsElementPresent(By by)
             {
