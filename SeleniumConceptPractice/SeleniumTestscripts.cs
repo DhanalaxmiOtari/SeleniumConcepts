@@ -18,6 +18,7 @@ namespace SeleniumConceptPractice
         public static string title = "Testing Controls";
         public static string URL = "http://www.uitestpractice.com/Students/Switchto";
         public static string URL1 = "https://www.justdial.com/Pune/Institutions-For-Aged-in-Baner/nct-10270422";
+        public static string NaukriURL = "https://www.naukri.com/registration/createAccount";
 
         WebHelp WebHelp = new WebHelp();
         
@@ -183,59 +184,65 @@ namespace SeleniumConceptPractice
             WebHelp.launchBrowser();
             WebHelp.openBrowser(URL, title);
         }
-
+        [TestMethod]
         public static void JustMouseHoverOver()
         {
             //WebDriverWait wait = new WebDriverWait(WebHelp.WebDriver, TimeSpan.FromSeconds(10));
             //var MoreHoverOverAddress = wait.Until(ExpectedConditions.ElementIsVisible(FindE))
             Thread.Sleep(5000);
+            /*
             Actions action = new Actions(WebHelp.WebDriver);
             IWebElement MoreInfo = WebHelp.WebDriver.FindElement(By.XPath("(//span[@class='lng_commn_all'][normalize-space()='more..'])[1]"));
-            IWebElement MoreInfoText = WebHelp.WebDriver.FindElement(By.XPath("//span[@id='morehvr_add_cont0']"));
+            IWebElement MoreInfoText = webHelp.WebDriver.FindElement(By.XPath("//span[@id='morehvr_add_cont0']"));
             action.MoveToElement(MoreInfo).Perform();
             Console.WriteLine("More Info Tool tip " + MoreInfo.Text + "\n");
             Console.WriteLine("More Info Tool tip text " + MoreInfoText.Text);
-            
+            */
         }
         
+        //Naukri Registration
+        public void NaukriRegistration()
+        {
+            WebHelp.launchBrowser();
+            WebHelp.openBrowser(NaukriURL, title);
 
-            public void TheLoginTest()
+        }
+
+        [TestMethod]
+        public void NewTabWindowHandler()
+        {
+            string WebURL = "https://www.nexsoftsys.com/articles/9-challenges-selenium-test-automation.html";
+            WebHelp.launchBrowser();
+            Thread.Sleep(1000);
+            WebHelp.openBrowser(WebURL, title);
+            Thread.Sleep(1000);
+            WebHelp.WebDriver.FindElement(By.XPath("//a[@title='Kicking Off Appium Test for Mobile Test Automation On Real Devices']")).Click();
+            Thread.Sleep(1000);
+            IList<string> windows = WebHelp.WebDriver.WindowHandles;
+            Console.WriteLine("Count = "+windows.Count);
+            foreach (var window in windows)
             {
-                WebHelp.Navigate().GoToUrl("http://azure.csm.test4/");
-                driver.FindElement(By.XPath("//input[@name='SIG_USER']")).Clear();
-                driver.FindElement(By.XPath("//input[@name='SIG_USER']")).SendKeys("superviser");
-                driver.FindElement(By.XPath("//input[@name='SIG_PASS']")).Clear()
-                driver.FindElement(By.XPath("//input[@name='SIG_PASS']")).SendKeys("password");
-
-                driver.FindElement(By.Id("button-1014-btnEl")).Click();
-                driver.FindElement(By.XPath("//span[contains(text(),'Studies')]")).Click();
-                driver.FindElement(By.XPath("//div[@class="x - column - header - trigger" and @xpath=1]")).Click();
-                driver.FindElement(By.XPath("//span/@class='x-menu-item-text x-menu-item-text-default x-menu-item-indent x-menu-item-indent-right-arrow' and @xpath = 2]")).Click();
-                driver.FindElement(By.XPath("//input[@placeholder="Enter Filter Text..."]")).SendKeys("DH");
-                driver.FindElement(By.XPath("/html[1]/body[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[2]/")).Click();
-                driver.FindElement(By.Id("button-1114-btnInnerEl")).Click();
-                driver.FindElement(By.Id("ext-351-inputEl")).Click();
-                driver.FindElement(By.Id("ext-351-inputEl")).Click();
-                driver.FindElement(By.Id("ext-351-inputEl")).Click();
-                driver.FindElement(By.Id("ext-351-inputEl")).Clear();
-                driver.FindElement(By.Id("ext-351-inputEl")).SendKeys("DH_Ames_Study_1_Ex_SetUp");
-                driver.FindElement(By.Id("button-1202-btnInnerEl")).Click();
-                driver.FindElement(By.Id("ext-element-96")).Click();
-                driver.FindElement(By.Id("button-1005-btnEl")).Click();
-                driver.FindElement(By.Id("button-1141-btnInnerEl")).Click();
-                driver.FindElement(By.Id("ext-element-96")).Click();
-                driver.FindElement(By.XPath("//table[@id='tableview-1222-record-170']/tbody/tr[2]/td[2]/div")).Click();
-                driver.FindElement(By.Id("button-1252-btnIconEl")).Click();
-                driver.FindElement(By.Id("button-1077-btnInnerEl")).Click();
-                driver.FindElement(By.Id("messagebox-1001-toolbar")).Click();
-                driver.FindElement(By.Id("button-1006-btnInnerEl")).Click();
-                driver.Close();
+                WebHelp.WebDriver.SwitchTo().Window(window);
+                Console.WriteLine("Window with index "+ windows.Count+" = "+ WebHelp.WebDriver.CurrentWindowHandle);
+               
             }
+            for (int i =0; i< windows.Count; i++)
+            {
+                Console.WriteLine("For loopp window index = "+i+" "+windows[i]);
+                Console.WriteLine("Window Title = " + WebHelp.WebDriver.Title);
+            }
+            WebHelp.WebDriver.SwitchTo().ParentFrame();
+            string ChildWindowTitle1 = WebHelp.WebDriver.Title;
+            Console.WriteLine(ChildWindowTitle1);
+            //Assert.AreEqual("Don't forget to read this...", ChildWindowTitle1);
+            Assert.AreEqual("Appium Test for Mobile Test Automation on Real Devices", ChildWindowTitle1);
+           
+        }
             private bool IsElementPresent(By by)
             {
                 try
                 {
-                    driver.FindElement(by);
+                    WebHelp.WebDriver.FindElement(by);
                     return true;
                 }
                 catch (NoSuchElementException)
@@ -248,7 +255,7 @@ namespace SeleniumConceptPractice
             {
                 try
                 {
-                    WebHelp.SwitchTo().Alert();
+                    WebHelp.WebDriver.SwitchTo().Alert();
                     return true;
                 }
                 catch (NoAlertPresentException)
@@ -261,9 +268,9 @@ namespace SeleniumConceptPractice
             {
                 try
                 {
-                    IAlert alert = driver.SwitchTo().Alert();
+                    IAlert alert = WebHelp.WebDriver.SwitchTo().Alert();
                     string alertText = alert.Text;
-                    if (acceptNextAlert)
+                    if (alertText.Length>1)
                     {
                         alert.Accept();
                     }
@@ -275,7 +282,7 @@ namespace SeleniumConceptPractice
                 }
                 finally
                 {
-                    acceptNextAlert = true;
+                    //= true;
                 }
             }
         }
@@ -283,6 +290,5 @@ namespace SeleniumConceptPractice
 
 
 
-}
 
     
